@@ -16,12 +16,9 @@ const secretsDeferred = ssm
     WithDecryption: true,
   })
   .promise()
-  .then(response => {
-    const result = new Map();
+  .then(({ Parameters: parameters }) => {
     const sliceLength = SSM_SECRETS_PATH.length + (SSM_SECRETS_PATH.endsWith('/') ? 0 : 1);
-    for (const parameter of response.Parameters) {
-      result.set(parameter.Name.slice(sliceLength), parameter.Value);
-    }
+    const result = new Map(parameters.map(({ Name: name, Value: value }) => [name.slice(sliceLength), value]));
     log.debug('resolved %o', result);
   });
 
