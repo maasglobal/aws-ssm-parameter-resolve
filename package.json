@@ -1,0 +1,8 @@
+{
+  "name": "maas-secrets-resolver",
+  "version": "1.0.0",
+  "description": "SSM secrets resolution for MaaS projectss",
+  "author": "MaaS Global",
+  "repository": "maasglobal/maas-secrets-resolver",
+  "license": "UNLICENSED"
+}

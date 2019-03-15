@@ -1,1 +1,1 @@
-# maas-ssm-resolver
+# maas-secrets-resolver
