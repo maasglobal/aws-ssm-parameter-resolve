@@ -20,6 +20,7 @@ const secretsDeferred = ssm
     const sliceLength = SSM_SECRETS_PATH.length + (SSM_SECRETS_PATH.endsWith('/') ? 0 : 1);
     const result = new Map(parameters.map(({ Name: name, Value: value }) => [name.slice(sliceLength), value]));
     log.debug('resolved %o', result);
+    return result;
   });
 
 module.exports = async name => {
