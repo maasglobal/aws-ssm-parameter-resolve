@@ -4,6 +4,11 @@
   "description": "SSM secrets resolution for MaaS projectss",
   "author": "MaaS Global",
   "repository": "maasglobal/maas-secrets-resolver",
+  "dependencies": {
+    "aws-sdk": "^2.422.0",
+    "es5-ext": "^0.10.49",
+    "log": "^3.2.0"
+  },
   "devDependencies": {
     "eslint": "^5.15.1",
     "eslint-config-maasglobal": "^2.1.0",
