@@ -33,7 +33,8 @@
     ]
   },
   "eslintConfig": {
-    "extends": "maasglobal"
+    "extends": "maasglobal",
+    "root": true
   },
   "scripts": {
     "lint": "eslint --ignore-path=.gitignore .",
