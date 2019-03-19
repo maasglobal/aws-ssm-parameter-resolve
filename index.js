@@ -40,11 +40,15 @@ module.exports = async (name, options = {}) => {
   if (!isObject(options)) options = {};
   const path = (() => {
     if (options.path) return options.path;
-    if (!SSM_SECRETS_PATH) throw new Error('Missing SSM_SECRETS_PATH environment variable');
+    if (!SSM_SECRETS_PATH) {
+      throw Object.assign(new Error('Missing SSM_SECRETS_PATH environment variable'), {
+        code: 'SECRETS_PATH_UNDEFINED',
+      });
+    }
     return SSM_SECRETS_PATH;
   })();
   const secrets = await resolveFromPath(path);
   const secret = secrets.get(name);
-  if (!secret) throw new Error(`${name} secret not found`);
+  if (!secret) throw Object.assign(new Error(`${name} secret not found`), { code: 'SECRET_NOT_FOUND' });
   return secret;
 };
