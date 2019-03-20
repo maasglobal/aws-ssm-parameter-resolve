@@ -1,0 +1,8 @@
+/.npmignore
+/.nyc_output
+/.travis.yml
+/coverage
+/node_modules
+npm-debug.log
+/package-lock.json
+/scripts/tag.sh
