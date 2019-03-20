@@ -1,1 +1,1 @@
--r test/_initialize-log-writer.js
+-r test/_setup.js
