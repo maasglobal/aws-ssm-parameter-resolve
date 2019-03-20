@@ -2,8 +2,6 @@
 
 'use strict';
 
-require('log-node')();
-
 const { expect } = require('chai');
 const proxyquire = require('proxyquire');
 
