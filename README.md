@@ -52,7 +52,7 @@ ssmParameterResolve('api-key', { path: '/secrets/bar/' }).then(apiKey =>
 npm run check-coverage
 ```
 
-[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/aws-ssm-parameter-resolve/branches/master/shields_badge.svg
-[nix-build-url]: https://semaphoreci.com/medikoo-org/aws-ssm-parameter-resolve
+[nix-build-image]: https://travis-ci.org/maasglobal/aws-ssm-parameter-resolve.svg?branch=master
+[nix-build-url]: https://travis-ci.org/maasglobal/aws-ssm-parameter-resolve
 [npm-image]: https://img.shields.io/npm/v/aws-ssm-parameter-resolve.svg
 [npm-url]: https://www.npmjs.com/package/aws-ssm-parameter-resolve
