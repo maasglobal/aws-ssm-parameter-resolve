@@ -1,3 +1,6 @@
+[![*nix build status][nix-build-image]][nix-build-url]
+[![npm version][npm-image]][npm-url]
+
 # aws-ssm-parameter-resolve
 
 ## Automated parameters resolution from [AWS Systems Manager Parameter Store](https://aws.amazon.com/systems-manager/features/#Parameter_Store)
@@ -48,3 +51,8 @@ ssmParameterResolve('api-key', { path: '/secrets/bar/' }).then(apiKey =>
 ```sh
 npm run check-coverage
 ```
+
+[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/aws-ssm-parameter-resolve/branches/master/shields_badge.svg
+[nix-build-url]: https://semaphoreci.com/medikoo-org/aws-ssm-parameter-resolve
+[npm-image]: https://img.shields.io/npm/v/aws-ssm-parameter-resolve.svg
+[npm-url]: https://www.npmjs.com/package/aws-ssm-parameter-resolve
