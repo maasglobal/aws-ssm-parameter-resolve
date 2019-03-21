@@ -6,7 +6,7 @@ const memoizee = require('memoizee');
 const log = require('log').get('maas-secrets');
 const SSM = require('aws-sdk/clients/ssm');
 
-const { SSM_SECRETS_PATH } = process.env;
+const { SSM_PARAMETERS_PATH } = process.env;
 
 const ssm = new SSM();
 
@@ -40,12 +40,12 @@ module.exports = async (name, options = {}) => {
   if (!isObject(options)) options = {};
   const path = (() => {
     if (options.path) return options.path;
-    if (!SSM_SECRETS_PATH) {
-      throw Object.assign(new Error('Missing SSM_SECRETS_PATH environment variable'), {
+    if (!SSM_PARAMETERS_PATH) {
+      throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
         code: 'SECRETS_PATH_UNDEFINED',
       });
     }
-    return SSM_SECRETS_PATH;
+    return SSM_PARAMETERS_PATH;
   })();
   const secrets = await resolveFromPath(path);
   const secret = secrets.get(name);

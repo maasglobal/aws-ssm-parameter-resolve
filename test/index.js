@@ -59,11 +59,11 @@ class SSMMock {
   }
 }
 
-process.env.SSM_SECRETS_PATH = '/default-path/';
+process.env.SSM_PARAMETERS_PATH = '/default-path/';
 const resolveSecret = proxyquire('../', { 'aws-sdk/clients/ssm': SSMMock });
 
-describe('maas-secrets-resolver', () => {
-  it('Should resolve secret values by default from SSM_SECRETS_PATH', async () => {
+describe('aws-ssm-parameter-resolve', () => {
+  it('Should resolve secret values by default from SSM_PARAMETERS_PATH', async () => {
     expect(await resolveSecret('ENDPOINT_KEY')).to.equal('some-fii');
     expect(await resolveSecret('ENDPOINT_URL')).to.equal('some-elo');
   });

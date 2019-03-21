@@ -1,9 +1,9 @@
 {
-  "name": "maas-secrets-resolver",
+  "name": "aws-ssm-parameter-resolve",
   "version": "1.0.0",
-  "description": "SSM secrets resolution for MaaS projectss",
+  "description": "Automated parameters resolution from AWS Systems Manager Parameter Store",
   "author": "MaaS Global",
-  "repository": "maasglobal/maas-secrets-resolver",
+  "repository": "maasglobal/aws-ssm-parameter-resolve",
   "dependencies": {
     "aws-sdk": "^2.423.0",
     "es5-ext": "^0.10.49",
