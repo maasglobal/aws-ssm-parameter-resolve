@@ -5,7 +5,8 @@
   "author": "MaaS Global",
   "repository": "maasglobal/aws-ssm-parameter-resolve",
   "dependencies": {
-    "aws-sdk": "^2.423.0",
+    "aws-sdk": "^2.426.0",
+    "d": "^1.0.0",
     "es5-ext": "^0.10.49",
     "log": "^5.0.0",
     "memoizee": "^0.4.14"
@@ -42,7 +43,7 @@
     "root": true
   },
   "scripts": {
-    "check-coverage": "npm run coverage && nyc check-coverage --statements 80 --function 80 --branches 70 --lines 80",
+    "check-coverage": "npm run coverage && nyc check-coverage --statements 80 --function 80 --branches 60 --lines 80",
     "coverage": "nyc --reporter=lcov --reporter=html --reporter=text-summary npm test",
     "lint": "eslint --ignore-path=.gitignore .",
     "lint-updated": "pipe-git-updated --ext=js -- eslint --ignore-pattern '!*'",

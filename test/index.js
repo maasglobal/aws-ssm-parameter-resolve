@@ -60,22 +60,25 @@ class SSMMock {
 }
 
 process.env.SSM_PARAMETERS_PATH = '/default-path/';
-const resolveSecret = proxyquire('../', { 'aws-sdk/clients/ssm': SSMMock });
+const parameterResolve = proxyquire('../', { 'aws-sdk/clients/ssm': SSMMock });
 
 describe('aws-ssm-parameter-resolve', () => {
   it('Should resolve secret values by default from SSM_PARAMETERS_PATH', async () => {
-    expect(await resolveSecret('ENDPOINT_KEY')).to.equal('some-fii');
-    expect(await resolveSecret('ENDPOINT_URL')).to.equal('some-elo');
+    const params = await parameterResolve();
+    expect(params.get('ENDPOINT_KEY')).to.equal('some-fii');
+    expect(params.get('ENDPOINT_URL')).to.equal('some-elo');
   });
 
   it('Should resolve secret values from custom path', async () => {
-    expect(await resolveSecret('CUSTOM_KEY', { path: '/custom-path/' })).to.equal('some-fii-custom');
-    expect(await resolveSecret('ENDPOINT_URL', { path: '/custom-path/' })).to.equal('some-custom-elo');
+    const params = await parameterResolve('/custom-path/');
+    expect(params.get('CUSTOM_KEY')).to.equal('some-fii-custom');
+    expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');
   });
 
   it('Should crash if secret is not resolved', async () => {
+    const params = await parameterResolve();
     try {
-      await resolveSecret('NOT_EXISTING');
+      params.get('NOT_EXISTING');
       throw new Error('Not really');
     } catch (error) {
       expect(error.code).to.equal('SECRET_NOT_FOUND');
