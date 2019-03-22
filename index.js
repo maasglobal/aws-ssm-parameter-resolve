@@ -1,6 +1,7 @@
 'use strict';
 
 const ensureString = require('es5-ext/object/validate-stringifiable-value');
+const isValue = require('es5-ext/object/is-value');
 const isObject = require('es5-ext/object/is-object');
 const memoizee = require('memoizee');
 const log = require('log').get('maas-secrets');
@@ -27,7 +28,16 @@ const resolveFromPath = memoizee(
     promise: true,
     resolvers: [
       path => {
-        path = ensureString(path);
+        if (!isValue(path)) {
+          if (!SSM_PARAMETERS_PATH) {
+            throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
+              code: 'SECRETS_PATH_UNDEFINED',
+            });
+          }
+          path = SSM_PARAMETERS_PATH;
+        } else {
+          path = ensureString(path);
+        }
         if (!path.endsWith('/')) path += '/';
         return path;
       },
@@ -38,16 +48,7 @@ const resolveFromPath = memoizee(
 module.exports = async (name, options = {}) => {
   name = ensureString(name);
   if (!isObject(options)) options = {};
-  const path = (() => {
-    if (options.path) return options.path;
-    if (!SSM_PARAMETERS_PATH) {
-      throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
-        code: 'SECRETS_PATH_UNDEFINED',
-      });
-    }
-    return SSM_PARAMETERS_PATH;
-  })();
-  const secrets = await resolveFromPath(path);
+  const secrets = await resolveFromPath(options.path);
   const secret = secrets.get(name);
   if (!secret) throw Object.assign(new Error(`${name} secret not found`), { code: 'SECRET_NOT_FOUND' });
   return secret;
