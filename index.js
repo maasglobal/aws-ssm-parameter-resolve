@@ -4,7 +4,7 @@ const ensureString = require('es5-ext/object/validate-stringifiable-value');
 const isValue = require('es5-ext/object/is-value');
 const d = require('d');
 const memoizee = require('memoizee');
-const log = require('log').get('maas-secrets');
+const log = require('log').get('aws-ssm-parameter');
 const SSM = require('aws-sdk/clients/ssm');
 
 const { SSM_PARAMETERS_PATH } = process.env;
