@@ -5,7 +5,7 @@
   "author": "MaaS Global",
   "repository": "maasglobal/aws-ssm-parameter-resolve",
   "dependencies": {
-    "aws-sdk": "^2.426.0",
+    "aws-sdk": "^2.429.0",
     "d": "^1.0.0",
     "es5-ext": "^0.10.49",
     "log": "^5.0.0",
