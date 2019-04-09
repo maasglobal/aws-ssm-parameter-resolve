@@ -10,15 +10,15 @@ install:
   - npm update # Ensure to use latest versions of dependencies
 
 stages:
-  - name: lint
-    if: type = pull_request AND branch != master
+  - name: test
+    if: type = pull_request
   - name: deploy
     if: branch = master AND type != pull_request
 
 jobs:
   include:
     - stage: lint
-      script: npm run lint-updated && npm run prettier-check-updated
+      script: npm run lint-updated && npm run prettier-check-updated && npm test
     - stage: deploy
       script: skip
       deploy:
