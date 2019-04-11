@@ -5,6 +5,10 @@ cache:
     - node_modules # Our node modules
     - $HOME/.npm # Globally installed packages, e.g. NPM
 
+branches: # Skip tag builds
+  except:
+    - /^\d+.\d+.\d+$/
+
 install:
   - npm install
   - npm update # Ensure to use latest versions of dependencies
