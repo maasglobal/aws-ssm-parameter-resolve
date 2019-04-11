@@ -40,7 +40,21 @@
   },
   "eslintConfig": {
     "extends": "maasglobal",
-    "root": true
+    "root": true,
+    "overrides": [
+      {
+        "files": "index.js",
+        "rules": {
+          "no-await-in-loop": "off"
+        }
+      },
+      {
+        "files": "lib/aws-lambda-writer.js",
+        "rules": {
+          "class-methods-use-this": "off"
+        }
+      }
+    ]
   },
   "scripts": {
     "check-coverage": "npm run coverage && nyc check-coverage --statements 80 --function 80 --branches 60 --lines 80",

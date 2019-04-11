@@ -20,13 +20,17 @@ function strictGetMethod(name) {
 
 module.exports = memoizee(
   async (path = null) => {
-    const { Parameters: parameters } = await ssm
-      .getParametersByPath({ Path: path, Recursive: true, WithDecryption: true })
-      .promise();
-    const result = Object.defineProperties(
-      new Map(parameters.map(({ Name: name, Value: value }) => [name.slice(path.length), value])),
-      { get: d(strictGetMethod) }
-    );
+    const result = Object.defineProperty(new Map(), 'get', d(strictGetMethod));
+    let nextToken;
+    do {
+      const awsResult = await ssm
+        .getParametersByPath({ Path: path, Recursive: true, WithDecryption: true, NextToken: nextToken })
+        .promise();
+      for (const { Name: name, Value: value } of awsResult.Parameters) {
+        result.set(name.slice(path.length), value);
+      }
+      nextToken = awsResult.NextToken;
+    } while (nextToken);
     log.debug('%s resolved %o', path, result);
     return result;
   },
