@@ -11,13 +11,13 @@ install:
 
 stages:
   - name: test
-    if: type = pull_request
+    if: type = pull_request AND branch != master
   - name: deploy
     if: branch = master AND type != pull_request
 
 jobs:
   include:
-    - stage: lint
+    - stage: test
       script: npm run lint-updated && npm run prettier-check-updated && npm test
     - stage: deploy
       script: skip
