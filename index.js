@@ -10,16 +10,9 @@ const SSM = require('aws-sdk/clients/ssm');
 const { SSM_PARAMETERS_PATH } = process.env;
 
 const ssm = new SSM({
-  maxRetries: 15,
+  maxRetries: 5,
   retryDelayOptions: {
-    customBackoff: retryCount => {
-      if (retryCount < 5) {
-        return 250;
-      } else if (retryCount < 10) {
-        return 500;
-      }
-      return 1000;
-    },
+    base: 300,
   },
 });
 
