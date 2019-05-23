@@ -9,7 +9,12 @@ const SSM = require('aws-sdk/clients/ssm');
 
 const { SSM_PARAMETERS_PATH } = process.env;
 
-const ssm = new SSM();
+const ssm = new SSM({
+  maxRetries: 5,
+  retryDelayOptions: {
+    base: 300,
+  },
+});
 
 function strictGetMethod(name) {
   name = ensureString(name);
