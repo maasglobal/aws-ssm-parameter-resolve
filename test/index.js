@@ -7,11 +7,9 @@ const sandbox = require('sinon').createSandbox();
 const AWS = require('aws-sdk');
 
 process.env.SSM_PARAMETERS_PATH = '/default-path/';
-process.env.SSM_MAX_AGE = 100;
+process.env.SSM_MAX_AGE = 10;
 
 const parameterResolve = require('../');
-
-// const FAKE_NOW = 1483228800000;
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
@@ -20,10 +18,8 @@ function sleep(time) {
 describe('aws-ssm-parameter-resolve', () => {
   let defaultPathStub;
   let customPathStub;
-  // let clock;
   let ssmStub;
   before(() => {
-    // clock = sandbox.useFakeTimers(FAKE_NOW);
     ssmStub = sandbox.stub(AWS.SSM.prototype, 'makeRequest');
   });
 
@@ -98,7 +94,6 @@ describe('aws-ssm-parameter-resolve', () => {
   });
 
   after(() => {
-    // clock.restore();
     sandbox.restore();
   });
 
@@ -129,12 +124,11 @@ describe('aws-ssm-parameter-resolve', () => {
     expect(defaultPathStub.callCount).to.equal(1);
   });
 
-  it('Should resolve secret values by default from SSM_PARAMETERS_PATH with max age', async () => {
+  it('Should fetch parameters from SSM twice because of max age', async () => {
+    await parameterResolve();
     await parameterResolve();
     expect(defaultPathStub.callCount).to.equal(1);
-    await parameterResolve();
-    await sleep(300);
-    // clock.tick(300)
+    await sleep(30);
     await parameterResolve();
     expect(defaultPathStub.callCount).to.equal(2);
   });
