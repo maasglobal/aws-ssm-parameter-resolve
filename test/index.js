@@ -9,7 +9,7 @@ const AWS = require('aws-sdk');
 process.env.SSM_PARAMETERS_PATH = '/default-path/';
 process.env.SSM_MAX_AGE = 10;
 
-const parameterResolve = require('../');
+const parameterResolver = require('../');
 
 function sleep(time) {
   return new Promise(resolve => setTimeout(() => resolve(), time));
@@ -90,46 +90,51 @@ describe('aws-ssm-parameter-resolve', () => {
   afterEach(() => {
     defaultPathStub.reset();
     customPathStub.reset();
-    parameterResolve.clear();
+    parameterResolver.resolve.clear();
   });
 
   after(() => {
     sandbox.restore();
   });
 
-  it('Should resolve secret values by default from SSM_PARAMETERS_PATH', async () => {
-    const params = await parameterResolve();
+  it('Should resolve parameter values by default from SSM_PARAMETERS_PATH', async () => {
+    const params = await parameterResolver.resolve();
     expect(params.get('ENDPOINT_KEY')).to.equal('some-fii');
     expect(params.get('ENDPOINT_URL')).to.equal('some-elo');
-    await parameterResolve(); // call second time, should be cached
+    await parameterResolver.resolve(); // call second time, should be cached
     expect(defaultPathStub.callCount).to.equal(1);
   });
 
-  it('Should resolve secret values from custom path', async () => {
-    const params = await parameterResolve('/custom-path/');
+  it('Should resolve parameter values from custom path', async () => {
+    const params = await parameterResolver.resolve('/custom-path/');
     expect(params.get('CUSTOM_KEY')).to.equal('some-fii-custom');
     expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');
-    await parameterResolve(); // call second time, should be cached
+    await parameterResolver.resolve(); // call second time, should be cached
     expect(customPathStub.callCount).to.equal(1);
   });
 
-  it('Should crash if secret is not resolved', async () => {
-    const params = await parameterResolve();
+  it('Should not crash if parameter is not resolved', async () => {
+    const params = await parameterResolver.resolve();
+    expect(params.get('NOT_EXISTING')).to.equal(undefined);
+  });
+
+  it('Should crash if parameter is strictly not resolved', async () => {
+    const params = await parameterResolver.resolve();
     try {
-      params.get('NOT_EXISTING');
+      params.strictGet('NOT_EXISTING');
       throw new Error('Not really');
     } catch (error) {
-      expect(error.code).to.equal('SECRET_NOT_FOUND');
+      expect(error.code).to.equal('PARAMETER_NOT_FOUND');
     }
     expect(defaultPathStub.callCount).to.equal(1);
   });
 
   it('Should fetch parameters from SSM twice because of max age', async () => {
-    await parameterResolve();
-    await parameterResolve();
+    await parameterResolver.resolve();
+    await parameterResolver.resolve();
     expect(defaultPathStub.callCount).to.equal(1);
     await sleep(30);
-    await parameterResolve();
+    await parameterResolver.resolve();
     expect(defaultPathStub.callCount).to.equal(2);
   });
 });
