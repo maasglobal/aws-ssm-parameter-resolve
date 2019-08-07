@@ -1,6 +1,6 @@
 {
   "name": "aws-ssm-parameter-resolve",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Automated parameters resolution from AWS Systems Manager Parameter Store",
   "author": "MaaS Global",
   "repository": "maasglobal/aws-ssm-parameter-resolve",
@@ -21,9 +21,9 @@
     "lint-staged": "^8.1.5",
     "log-node": "^7.0.0",
     "mocha": "^6.1.2",
-    "nyc": "^13.3.0",
+    "nyc": "^14.1.1",
     "prettier": "^1.16.4",
-    "proxyquire": "^2.1.0"
+    "sinon": "^7.3.2"
   },
   "husky": {
     "hooks": {

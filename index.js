@@ -7,7 +7,7 @@ const memoizee = require('memoizee');
 const log = require('log').get('aws-ssm-parameter');
 const SSM = require('aws-sdk/clients/ssm');
 
-const { SSM_PARAMETERS_PATH } = process.env;
+const { SSM_PARAMETERS_PATH, SSM_MAX_AGE } = process.env;
 
 const ssm = new SSM({
   maxRetries: 5,
@@ -41,6 +41,7 @@ module.exports = memoizee(
   },
   {
     length: 1,
+    maxAge: SSM_MAX_AGE,
     promise: true,
     resolvers: [
       path => {
