@@ -1,6 +1,6 @@
 {
   "name": "aws-ssm-parameter-resolve",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Automated parameters resolution from AWS Systems Manager Parameter Store",
   "author": "MaaS Global",
   "repository": "maasglobal/aws-ssm-parameter-resolve",
