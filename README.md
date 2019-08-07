@@ -16,16 +16,16 @@ npm install aws-ssm-paramter-resolve
 Resolve parameters from common path, if not passed as an argument, it is read from `SSM_PARAMETERS_PATH` env variable.
 
 ```javascript
-const ssmParameterResolve = require('aws-ssm-paramter-resolve');
+const ssmParameterResolver = require('aws-ssm-parameter-resolve');
 
-ssmParameterResolve().then(parameters => {
+ssmParameterResolver.resolve().then(parameters => {
   // Assuming process.env.SSM_PARAMETERS_PATH is '/secrets/foo/'
   console.log(`Param for /secrets/foo/api-key: ${parameters.get('api-key')}`);
 });
 
-ssmParameterResolve('/secrets/bar/').then(parameters =>
-  console.log(`Resolved /secrets/bar/api-key ${parameters.get('api-key')}`)
-);
+ssmParameterResolver
+  .resolve('/secrets/bar/')
+  .then(parameters => console.log(`Resolved /secrets/bar/api-key ${parameters.get('api-key')}`));
 ```
 
 ## Test & coverage
