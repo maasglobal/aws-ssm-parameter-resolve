@@ -25,7 +25,7 @@ function strictGetMethod(name) {
 
 module.exports = memoizee(
   async (path = null) => {
-    const result = Object.defineProperty(new Map(), 'get', d(strictGetMethod));
+    const result = Object.defineProperty(new Map(), 'strictGet', d(strictGetMethod));
     let nextToken;
     do {
       const awsResult = await ssm

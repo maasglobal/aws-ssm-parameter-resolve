@@ -113,10 +113,15 @@ describe('aws-ssm-parameter-resolve', () => {
     expect(customPathStub.callCount).to.equal(1);
   });
 
-  it('Should crash if secret is not resolved', async () => {
+  it('Should not crash if secret is not resolved', async () => {
+    const params = await parameterResolve();
+    expect(params.get('NOT_EXISTING')).to.equal(undefined);
+  });
+
+  it('Should crash if secret is strictly not resolved', async () => {
     const params = await parameterResolve();
     try {
-      params.get('NOT_EXISTING');
+      params.strictGet('NOT_EXISTING');
       throw new Error('Not really');
     } catch (error) {
       expect(error.code).to.equal('SECRET_NOT_FOUND');
