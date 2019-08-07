@@ -97,7 +97,7 @@ describe('aws-ssm-parameter-resolve', () => {
     sandbox.restore();
   });
 
-  it('Should resolve secret values by default from SSM_PARAMETERS_PATH', async () => {
+  it('Should resolve parameter values by default from SSM_PARAMETERS_PATH', async () => {
     const params = await parameterResolve();
     expect(params.get('ENDPOINT_KEY')).to.equal('some-fii');
     expect(params.get('ENDPOINT_URL')).to.equal('some-elo');
@@ -105,7 +105,7 @@ describe('aws-ssm-parameter-resolve', () => {
     expect(defaultPathStub.callCount).to.equal(1);
   });
 
-  it('Should resolve secret values from custom path', async () => {
+  it('Should resolve parameter values from custom path', async () => {
     const params = await parameterResolve('/custom-path/');
     expect(params.get('CUSTOM_KEY')).to.equal('some-fii-custom');
     expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');
@@ -113,18 +113,18 @@ describe('aws-ssm-parameter-resolve', () => {
     expect(customPathStub.callCount).to.equal(1);
   });
 
-  it('Should not crash if secret is not resolved', async () => {
+  it('Should not crash if parameter is not resolved', async () => {
     const params = await parameterResolve();
     expect(params.get('NOT_EXISTING')).to.equal(undefined);
   });
 
-  it('Should crash if secret is strictly not resolved', async () => {
+  it('Should crash if parameter is strictly not resolved', async () => {
     const params = await parameterResolve();
     try {
       params.strictGet('NOT_EXISTING');
       throw new Error('Not really');
     } catch (error) {
-      expect(error.code).to.equal('SECRET_NOT_FOUND');
+      expect(error.code).to.equal('PARAMETER_NOT_FOUND');
     }
     expect(defaultPathStub.callCount).to.equal(1);
   });

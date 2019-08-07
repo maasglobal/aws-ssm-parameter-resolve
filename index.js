@@ -19,7 +19,7 @@ const ssm = new SSM({
 function strictGetMethod(name) {
   name = ensureString(name);
   const value = Map.prototype.get.call(this, name);
-  if (!value) throw Object.assign(new Error(`${name} secret not found`), { code: 'SECRET_NOT_FOUND' });
+  if (!value) throw Object.assign(new Error(`${name} parameter not found`), { code: 'PARAMETER_NOT_FOUND' });
   return value;
 }
 
@@ -48,7 +48,7 @@ module.exports = memoizee(
         if (!isValue(path)) {
           if (!SSM_PARAMETERS_PATH) {
             throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
-              code: 'SECRETS_PATH_UNDEFINED',
+              code: 'PARAMETERS_PATH_UNDEFINED',
             });
           }
           path = SSM_PARAMETERS_PATH;
