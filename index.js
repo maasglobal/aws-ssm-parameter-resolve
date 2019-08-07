@@ -23,41 +23,43 @@ function strictGetMethod(name) {
   return value;
 }
 
-module.exports = memoizee(
-  async (path = null) => {
-    const result = Object.defineProperty(new Map(), 'strictGet', d(strictGetMethod));
-    let nextToken;
-    do {
-      const awsResult = await ssm
-        .getParametersByPath({ Path: path, Recursive: true, WithDecryption: true, NextToken: nextToken })
-        .promise();
-      for (const { Name: name, Value: value } of awsResult.Parameters) {
-        result.set(name.slice(path.length), value);
-      }
-      nextToken = awsResult.NextToken;
-    } while (nextToken);
-    log.debug('%s resolved %o', path, result);
-    return result;
-  },
-  {
-    length: 1,
-    maxAge: SSM_MAX_AGE,
-    promise: true,
-    resolvers: [
-      path => {
-        if (!isValue(path)) {
-          if (!SSM_PARAMETERS_PATH) {
-            throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
-              code: 'PARAMETERS_PATH_UNDEFINED',
-            });
-          }
-          path = SSM_PARAMETERS_PATH;
-        } else {
-          path = ensureString(path);
+module.exports = {
+  resolve: memoizee(
+    async (path = null) => {
+      const result = Object.defineProperty(new Map(), 'strictGet', d(strictGetMethod));
+      let nextToken;
+      do {
+        const awsResult = await ssm
+          .getParametersByPath({ Path: path, Recursive: true, WithDecryption: true, NextToken: nextToken })
+          .promise();
+        for (const { Name: name, Value: value } of awsResult.Parameters) {
+          result.set(name.slice(path.length), value);
         }
-        if (!path.endsWith('/')) path += '/';
-        return path;
-      },
-    ],
-  }
-);
+        nextToken = awsResult.NextToken;
+      } while (nextToken);
+      log.debug('%s resolved %o', path, result);
+      return result;
+    },
+    {
+      length: 1,
+      maxAge: SSM_MAX_AGE,
+      promise: true,
+      resolvers: [
+        path => {
+          if (!isValue(path)) {
+            if (!SSM_PARAMETERS_PATH) {
+              throw Object.assign(new Error('Missing SSM_PARAMETERS_PATH environment variable'), {
+                code: 'PARAMETERS_PATH_UNDEFINED',
+              });
+            }
+            path = SSM_PARAMETERS_PATH;
+          } else {
+            path = ensureString(path);
+          }
+          if (!path.endsWith('/')) path += '/';
+          return path;
+        },
+      ],
+    }
+  ),
+};
