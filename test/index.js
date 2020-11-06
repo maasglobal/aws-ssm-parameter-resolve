@@ -117,9 +117,11 @@ describe('aws-ssm-parameter-resolve', () => {
 
   it('Should resolve parameter values from custom path and credentials', async () => {
     const params = await parameterResolver.resolve('/custom-path/', {
-      accessKeyId: 'accessKeyId',
-      secretAccessKey: 'secretAccessKey',
-      sessionToken: 'sessionToken',
+      credentials: {
+        accessKeyId: 'accessKeyId',
+        secretAccessKey: 'secretAccessKey',
+        sessionToken: 'sessionToken',
+      },
     });
     expect(params.get('CUSTOM_KEY')).to.equal('some-fii-custom');
     expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');

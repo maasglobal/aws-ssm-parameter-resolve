@@ -18,13 +18,13 @@ function strictGetMethod(name) {
 
 module.exports = {
   resolve: memoizee(
-    async (path = null, credentials) => {
+    async (path = null, params = {}) => {
       const ssm = new SSM({
         maxRetries: 5,
         retryDelayOptions: {
           base: 300,
         },
-        credentials,
+        credentials: params.credentials,
       });
       const result = Object.defineProperty(new Map(), 'strictGet', d(strictGetMethod));
       let nextToken;
