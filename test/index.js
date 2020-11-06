@@ -90,6 +90,7 @@ describe('aws-ssm-parameter-resolve', () => {
   afterEach(() => {
     defaultPathStub.reset();
     customPathStub.reset();
+    ssmStub.reset();
     parameterResolver.resolve.clear();
   });
 
@@ -111,6 +112,24 @@ describe('aws-ssm-parameter-resolve', () => {
     expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');
     await parameterResolver.resolve(); // call second time, should be cached
     expect(customPathStub.callCount).to.equal(1);
+    expect(ssmStub.getCall(0).thisValue.config.credentials).to.eql(null);
+  });
+
+  it('Should resolve parameter values from custom path and credentials', async () => {
+    const params = await parameterResolver.resolve('/custom-path/', {
+      accessKeyId: 'accessKeyId',
+      secretAccessKey: 'secretAccessKey',
+      sessionToken: 'sessionToken',
+    });
+    expect(params.get('CUSTOM_KEY')).to.equal('some-fii-custom');
+    expect(params.get('ENDPOINT_URL')).to.equal('some-custom-elo');
+    await parameterResolver.resolve(); // call second time, should be cached
+    expect(customPathStub.callCount).to.equal(1);
+    expect(ssmStub.getCall(0).thisValue.config.credentials).to.eql({
+      accessKeyId: 'accessKeyId',
+      secretAccessKey: 'secretAccessKey',
+      sessionToken: 'sessionToken',
+    });
   });
 
   it('Should not crash if parameter is not resolved', async () => {

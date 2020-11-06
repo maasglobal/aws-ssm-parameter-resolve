@@ -9,13 +9,6 @@ const SSM = require('aws-sdk/clients/ssm');
 
 const { SSM_PARAMETERS_PATH, SSM_MAX_AGE } = process.env;
 
-const ssm = new SSM({
-  maxRetries: 5,
-  retryDelayOptions: {
-    base: 300,
-  },
-});
-
 function strictGetMethod(name) {
   name = ensureString(name);
   const value = Map.prototype.get.call(this, name);
@@ -25,7 +18,14 @@ function strictGetMethod(name) {
 
 module.exports = {
   resolve: memoizee(
-    async (path = null) => {
+    async (path = null, credentials) => {
+      const ssm = new SSM({
+        maxRetries: 5,
+        retryDelayOptions: {
+          base: 300,
+        },
+        credentials,
+      });
       const result = Object.defineProperty(new Map(), 'strictGet', d(strictGetMethod));
       let nextToken;
       do {
